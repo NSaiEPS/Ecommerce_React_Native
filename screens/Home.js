@@ -7,6 +7,8 @@ import { Entypo,Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native'
 import { Constants } from '../Constants'
 import { TextInput } from 'react-native'
+import { useSelector } from 'react-redux';
+
 // import { AntDesign } from '@expo/vector-icons'; 
 // import { AntDesign } from '@expo/vector-icons'; 
 
@@ -14,6 +16,9 @@ import { TextInput } from 'react-native'
 {/* <AntDesign name="menuunfold" size={24} color="black" /> */}
 
 const Home = ({navigation}) => {
+let selectUserData=useSelector(state=>state?.info?.usersData)
+
+// console.log(selectUserData)
 
   useLayoutEffect(()=>{
     // navigation.setOptions({
@@ -41,6 +46,7 @@ const Home = ({navigation}) => {
 
 
 let [leftMoreOptions,setleftMoreOptions]=useState(false)
+const [userInfo, SetuserInfo] = useState(false)
 
 let handleMoreOptions=()=>{
   setleftMoreOptions(!leftMoreOptions)
@@ -112,6 +118,10 @@ const windowHeight = Dimensions.get('window').height;
            source={{
           uri: "https://www.seekpng.com/png/detail/428-4287240_no-avatar-user-circle-icon-png.png"
            }}
+
+           onPress={
+            ()=>SetuserInfo(!userInfo)}
+           
            />
 
   </TouchableOpacity>
@@ -132,31 +142,52 @@ const windowHeight = Dimensions.get('window').height;
 
      
   </TouchableOpacity>
+  {
+    userInfo &&
+  
 
   <View
+  
   style={{
     position:'absolute',
     top:35,
     right:15,
     elevation:3,
+    zIndex:3,
     backgroundColor:'white',
     width:150,
-    borderWidth:1
+    borderWidth:1,
+    zIndex: 15,
+     elevation: (Platform.OS === 'android') ? 50 : 0
   }}
   >
     <Button 
     title='Logout'
+
+    onPress={()=>{
+      auth.signOut().then(()=>{
+        navigation.replace("Login")
+      }
+      
+      )
+      SetuserInfo(false)
+
+    }}
     />
+{
+  selectUserData?.userEmail==='sai@gmail.com' &&
 
     <Button 
     
     title='DashBoard'
     onPress={()=>
-      navigation.navigate("Admin")
+      {navigation.navigate("Admin")
+       SetuserInfo(false)
+    }
     }
     
-    />
-  </View>
+    />}
+  </View>}
 
         </View>
         </View>
@@ -172,7 +203,10 @@ const windowHeight = Dimensions.get('window').height;
             marginTop:5,
             position:'relative',
             color:'black',
-            marginBottom:7
+            marginBottom:7,
+            zIndex:0,
+            elevation:0
+            
 
 
         }}
@@ -183,6 +217,8 @@ const windowHeight = Dimensions.get('window').height;
           style={{
             paddingLeft:35,
             padding:5,
+            zIndex:0,
+            elevation:0
             
             
             

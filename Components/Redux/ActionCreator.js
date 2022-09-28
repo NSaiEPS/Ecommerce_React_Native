@@ -1,6 +1,6 @@
 const InitialState=({
     selectCategory:'New',
-    name:'',
+    
     usersData:{},
     themeWhite:false
     
