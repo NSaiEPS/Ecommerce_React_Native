@@ -60,7 +60,7 @@ const Register = () => {
           name:text
         })
        }}
-       type='email'
+       type='text'
 
        />
          <Input 
