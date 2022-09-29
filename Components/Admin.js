@@ -1,4 +1,4 @@
-import { FlatList, KeyboardAvoidingView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, KeyboardAvoidingView, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { Button, Input } from 'react-native-elements'
 import { Picker } from '@react-native-picker/picker'
@@ -45,7 +45,7 @@ const Admin = ({navigation}) => {
       let formReset=()=>{
         setitems({
         
-          formOpen:false,
+          formOpen:true,
         name:'',
         imageUrl:'',
         rating:0,
@@ -66,6 +66,9 @@ const Admin = ({navigation}) => {
         
          
         formReset()
+        setitems({
+          formOpen:false
+        })
         // console.log(
         //  items.name,
         //  items.imageUrl,
@@ -77,6 +80,16 @@ const Admin = ({navigation}) => {
         //  items.category
 
         // )
+       }
+
+
+       const [refreshing, setRefreshing]=useState(false)
+       let handleRefresh=()=>{
+        setRefreshing(true)
+        formReset()
+
+        setRefreshing(false)
+
        }
   return (
     <View
@@ -111,12 +124,22 @@ const Admin = ({navigation}) => {
        style={
         styles.addForm
        }
+       
+       
        >
 
         <ScrollView
          style={
           styles.addFormInside
          }
+         refreshControl={
+          <RefreshControl 
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          
+          />
+         }
+         
         >
      
 
@@ -353,8 +376,15 @@ style={{
    
    title='Submit the Form'
    type='outline'
-   onPress={handleSubmitForm}
-   
+   onPress={ ()=>{
+    
+    handleSubmitForm()
+  
+    setitems({
+      formOpen:false
+    })
+  }
+   }
    />
 
 
@@ -384,7 +414,12 @@ style={{
    containerStyle={
     styles.formCancelBtn
    }
-   onPress={()=>formReset()
+   onPress={()=>{
+    formReset()
+    setitems({
+      formOpen:false
+    })
+  }
   
   }
    type='outline'
